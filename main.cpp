@@ -10,8 +10,12 @@ using namespace std;
 #define LIN 6
 #define COL 7
 
-void iniciarfunc(int tabuleiro[LIN][COL]);
-void calcvitoria(int& vitoria, int tabuleiro[LIN][COL]);
+void IniciarFunc(int tabuleiro[LIN][COL]);
+void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]);
+void Checar(char& continuar);
+void Checar(int& escolha);
+int Jogador(int jogador);
+
 
 int main(void) {
 
@@ -20,14 +24,17 @@ int main(void) {
     int tabuleiro [LIN][COL];
     int escolha;
     int jogador = 1;
-    int vitoria = 0;
+    char continuar;
 
-    iniciarfunc(tabuleiro);
+    do{
+
+    int vitoria = 0;
+    IniciarFunc(tabuleiro);
 
     do{
     cout << "Jogador: " << jogador << "\n";
     cout << "Qual coluna deseja jogar?\n";
-    cin >> escolha;
+    Checar(escolha);
 
     for (int i = LIN; i >= 0; i--) {
         if(tabuleiro[i][escolha - 1] == 0){
@@ -36,13 +43,9 @@ int main(void) {
         }
     }
 
-    if(jogador == 1){
-        jogador++;
-    }else if (jogador == 2){
-        jogador--;
-    }
+    jogador = Jogador(jogador);
 
-    calcvitoria(vitoria, tabuleiro);
+    CalcVitoria(vitoria, tabuleiro);
 
     for (int i = 0; i < LIN; i++) {
         for (int j = 0; j < COL; j++) {
@@ -54,9 +57,15 @@ int main(void) {
     cout << "\n";
 
     }while(vitoria == 0);
-    cout << "vitoriaaaaaaa " << vitoria;
 
+    cout << "vitoriaaaaaaa " << vitoria << "\n";
 
+    cout << "Deseja continuar? s/n\n";
+
+    Checar(continuar);
+
+    cout << "\n";
+    }while(continuar == 's');
 
 
 
@@ -76,7 +85,7 @@ int main(void) {
 }
 
 
-void iniciarfunc(int tabuleiro[LIN][COL]){
+void IniciarFunc(int tabuleiro[LIN][COL]){
 
     for (int i = 0; i < LIN; i++) {
         for (int j = 0; j < COL; j++) {
@@ -86,7 +95,7 @@ void iniciarfunc(int tabuleiro[LIN][COL]){
 
 }
 
-void calcvitoria(int& vitoria, int tabuleiro[LIN][COL]){
+void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]){
 
     int jog = 1;
 
@@ -142,6 +151,34 @@ void calcvitoria(int& vitoria, int tabuleiro[LIN][COL]){
         }
     }
 
+}
+
+void Checar(char& continuar){
+    do {
+        continuar = getch();
+        tolower(continuar);
+    }while(continuar != 's' && continuar != 'n');
+}
+void Checar(int& escolha){
+
+    do{
+        cin >> escolha;
+        if(escolha > COL || escolha < 1){
+            cout << "Coluna invalida, tente novamente: ";
+        }
+    }while(escolha > COL || escolha < 1);
+
+}
+
+int Jogador(int jogador){
+    
+    if(jogador == 1){
+        jogador++;
+    }else if (jogador == 2){
+        jogador--;
+    }
+
+    return jogador;
 }
 
 
