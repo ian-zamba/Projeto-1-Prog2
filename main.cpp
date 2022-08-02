@@ -13,7 +13,7 @@ using namespace std;
 void IniciarFunc(int tabuleiro[LIN][COL]);
 void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]);
 void Checar(char& continuar);
-void Checar(int& escolha);
+void Checar(int& escolha, int contar[]);
 int Jogador(int jogador);
 
 
@@ -28,13 +28,14 @@ int main(void) {
 
     do{
 
+    int contar[] = {0, 0, 0, 0, 0, 0, 0};
     int vitoria = 0;
     IniciarFunc(tabuleiro);
 
     do{
     cout << "Jogador: " << jogador << "\n";
     cout << "Qual coluna deseja jogar?\n";
-    Checar(escolha);
+    Checar(escolha, contar);
 
     for (int i = LIN; i >= 0; i--) {
         if(tabuleiro[i][escolha - 1] == 0){
@@ -159,14 +160,22 @@ void Checar(char& continuar){
         tolower(continuar);
     }while(continuar != 's' && continuar != 'n');
 }
-void Checar(int& escolha){
+void Checar(int& escolha, int contar[]){
+
+    int aux;
 
     do{
+        
         cin >> escolha;
-        if(escolha > COL || escolha < 1){
+        if(escolha > COL || escolha < 1 || contar[escolha-1] == 6){
             cout << "Coluna invalida, tente novamente: ";
+            aux = 0;
+        }else{
+            contar[escolha-1]++;
+            aux = 1;
         }
-    }while(escolha > COL || escolha < 1);
+
+    }while(escolha > COL || escolha < 1 || aux == 0);
 
 }
 
