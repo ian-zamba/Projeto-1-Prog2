@@ -127,22 +127,22 @@ void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]){
                     }
                 }
 
-                if(i + 3 < 6){
+                if(i + 3 < LIN){
                     if(tabuleiro[i][j] == jog && tabuleiro[i+1][j] == jog && tabuleiro[i+2][j] == jog && tabuleiro[i+3][j] == jog){
                         vitoria = jog;
                     }
                 }
 
 //=============================diagonal=========================================
-
-                if(j - 3 > 0 && i - 3 < 6){
-                    if(tabuleiro[i][j] == jog && tabuleiro[i-1][j-1] == jog && tabuleiro[i-2][j-2] == jog && tabuleiro[i-3][j-3] == jog){
+                
+                if(j + 3 < 7 && i - 3 > 0){
+                    if(tabuleiro[i][j] == jog && tabuleiro[i-1][j+1] == jog && tabuleiro[i-2][j+2] == jog && tabuleiro[i-3][j+3] == jog){
                         vitoria = jog;
                     }
                 }
 
-                if(j + 3 < 7 && i - 3 < 6){
-                    if(tabuleiro[i][j] == jog && tabuleiro[i-1][j+1] == jog && tabuleiro[i-2][j+2] == jog && tabuleiro[i-3][j+3] == jog){
+                if(j + 3 < 7 && i + 3 < LIN){
+                    if(tabuleiro[i][j] == jog && tabuleiro[i+1][j+1] == jog && tabuleiro[i+2][j+2] == jog && tabuleiro[i+3][j+3] == jog){
                         vitoria = jog;
                     }
                 }
