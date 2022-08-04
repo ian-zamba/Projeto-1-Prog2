@@ -3,6 +3,7 @@
 #include <math.h>
 #include <iostream>
 #include <cmath>
+#include <conio.h>
 using namespace std;
 
 #define MAX_COL 89
@@ -37,7 +38,7 @@ int main(void) {
     cout << "Qual coluna deseja jogar?\n";
     Checar(escolha, contar);
 
-    for (int i = LIN; i >= 0; i--) {
+    for (int i = LIN - 1; i >= 0; i--) {
         if(tabuleiro[i][escolha - 1] == 0){
             tabuleiro[i][escolha - 1] = jogador;
             break;
@@ -134,7 +135,7 @@ void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]){
                 }
 
 //=============================diagonal=========================================
-                
+
                 if(j + 3 < 7 && i - 3 > 0){
                     if(tabuleiro[i][j] == jog && tabuleiro[i-1][j+1] == jog && tabuleiro[i-2][j+2] == jog && tabuleiro[i-3][j+3] == jog){
                         vitoria = jog;
@@ -165,7 +166,7 @@ void Checar(int& escolha, int contar[]){
     int aux;
 
     do{
-        
+
         cin >> escolha;
         if(escolha > COL || escolha < 1 || contar[escolha-1] == 6){
             cout << "Coluna invalida, tente novamente: ";
@@ -180,7 +181,7 @@ void Checar(int& escolha, int contar[]){
 }
 
 int Jogador(int jogador){
-    
+
     if(jogador == 1){
         jogador++;
     }else if (jogador == 2){
