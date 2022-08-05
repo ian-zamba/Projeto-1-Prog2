@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include <conio.h>
+#include <windows.h>
 using namespace std;
 
 #define MAX_COL 89
@@ -16,6 +17,8 @@ void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]);
 void Checar(char& continuar);
 void Checar(int& escolha, int contar[]);
 int Jogador(int jogador);
+void TelaInicial ();
+void ImprimirTabuleiro(int tabuleiro[LIN][COL]);
 
 
 int main(void) {
@@ -23,61 +26,60 @@ int main(void) {
     system("mode con:cols=89 lines=25");//deixar o cmd do tamanho da tela do jogo
 
     int tabuleiro [LIN][COL];
-    int escolha;
-    int jogador = 1;
+    int escolha, jogador = 2;
     char continuar;
 
-    do{
-
-    int contar[] = {0, 0, 0, 0, 0, 0, 0};
-    int vitoria = 0;
-    IniciarFunc(tabuleiro);
+    TelaInicial();
 
     do{
-    cout << "Jogador: " << jogador << "\n";
-    cout << "Qual coluna deseja jogar?\n";
-    Checar(escolha, contar);
 
-    for (int i = LIN - 1; i >= 0; i--) {
-        if(tabuleiro[i][escolha - 1] == 0){
-            tabuleiro[i][escolha - 1] = jogador;
-            break;
-        }
-    }
 
-    jogador = Jogador(jogador);
 
-    CalcVitoria(vitoria, tabuleiro);
+        int contar[] = {0, 0, 0, 0, 0, 0, 0};
+        int vitoria = 0;
+        IniciarFunc(tabuleiro);
+        ImprimirTabuleiro(tabuleiro);
 
-    for (int i = 0; i < LIN; i++) {
-        for (int j = 0; j < COL; j++) {
-            cout << tabuleiro[i][j] << " ";
-        }
+        do{
+
+            jogador = Jogador(jogador);
+            gotoxy(1,1);
+            cout << "Jogador: " << jogador << "\n";
+            textbackground(WHITE);
+            cout << "Qual coluna deseja jogar?\n   ";
+            gotoxy(1,3);
+            Checar(escolha, contar);
+
+            for (int i = LIN - 1; i >= 0; i--) {
+                if(tabuleiro[i][escolha - 1] == 0){
+                    tabuleiro[i][escolha - 1] = jogador;
+                    break;
+                }
+            }
+
+
+
+            CalcVitoria(vitoria, tabuleiro);
+
+
+            cout << "\n";
+            ImprimirTabuleiro(tabuleiro);
+
+        }while(vitoria == 0);
+
+
+        cout << "vitoriaaaaaaa " << vitoria << "\n";
+        cout << "Deseja continuar? s/n\n";
+
+        Checar(continuar);
+
         cout << "\n";
-    }
-
-    cout << "\n";
-
-    }while(vitoria == 0);
-
-    cout << "vitoriaaaaaaa " << vitoria << "\n";
-
-    cout << "Deseja continuar? s/n\n";
-
-    Checar(continuar);
-
-    cout << "\n";
     }while(continuar == 's');
 
 
 
 /*
-    cout << "  _      _____ _____   _  _    \n";
-    cout << " | |    |_   _/ ____| | || |   \n";
-    cout << " | |      | || |  __  | || |_  \n";
-    cout << " | |      | || | |_ | |__   _| \n";
-    cout << " | |____ _| || |__| |    | |   \n";
-    cout << " |______|_____\\_____|    |_|   \n";
+
 */
 
 
@@ -161,6 +163,7 @@ void Checar(char& continuar){
         tolower(continuar);
     }while(continuar != 's' && continuar != 'n');
 }
+
 void Checar(int& escolha, int contar[]){
 
     int aux;
@@ -184,11 +187,125 @@ int Jogador(int jogador){
 
     if(jogador == 1){
         jogador++;
+        textbackground(GREEN);
     }else if (jogador == 2){
         jogador--;
+        textbackground(BLUE);
     }
 
     return jogador;
+}
+
+void TelaInicial(){
+
+    textbackground(WHITE);
+    textcolor(BLACK);
+    gotoxy(1,1);
+
+    for (int i = 1; i <= MAX_LIN; i++){
+        for (int c = 1; c <= MAX_COL; c++){
+            printf(" ");
+        }
+        printf("\n");
+    }
+
+    gotoxy(30, 4);
+    cout << "  _      _____ _____   _  _    ";
+    gotoxy(30, 5);
+    cout << " | |    |_   _/ ____| | || |   ";
+    gotoxy(30, 6);
+    cout << " | |      | || |  __  | || |_  ";
+    gotoxy(30, 7);
+    cout << " | |      | || | |_ | |__   _| ";
+    gotoxy(30, 8);
+    cout << " | |____ _| || |__| |    | |   ";
+    gotoxy(30, 9);
+    cout << " |______|_____\\_____|    |_|   ";
+
+    gotoxy(26,16);
+    cout << "Pressione qualquer tecla para continuar";
+    getch();
+
+    gotoxy(12, 16);
+    printf("CARREGANDO");
+
+    gotoxy(40,18);
+    printf("          ");
+
+    gotoxy(79,24);
+    printf("        ");
+    textbackground(BLACK);
+    gotoxy(24, 16);
+    printf("                                                        ");
+
+    textbackground(RED);
+    gotoxy(24, 16);
+
+    for (int c = 16; c <= 25; c++){
+        printf(" ");
+        //Sleep(200);
+    }
+    for (int c = 26; c <= 66; c++){
+        printf(" ");
+        //Sleep(70);
+    }
+    for (int c = 67; c <= 71; c++){
+        printf(" ");
+       //Sleep(300);
+    }
+
+    textbackground(WHITE);
+    system("cls");
+    gotoxy(1,1);
+
+}
+
+void ImprimirTabuleiro(int tabuleiro[LIN][COL]){
+
+    int linha = 6, coluna = 22, colunas = 1;
+    int lin = 0, col = 0;
+
+    textbackground(RED);
+    gotoxy(20,5);
+
+    for (int l = 5; l <= MAX_LIN - 1; l++){
+        for (int c = 6; c <= MAX_COL-34; c++){
+            printf(" ");
+        }
+        gotoxy(20 ,l);
+    }
+
+    do{
+        linha = 6;
+        lin = 0;
+        do{
+
+            if(tabuleiro[lin][col] == 0){
+                textbackground(WHITE);
+            }else if(tabuleiro[lin][col] == 1){
+                textbackground(BLUE);
+            }else if(tabuleiro[lin][col] == 2){
+                textbackground(GREEN);
+            }
+
+
+
+            gotoxy(coluna,linha);
+
+            for (int i = linha; i < linha + 2; i++) {
+                for (int j = coluna; j < coluna + 4; j++) {
+                    gotoxy(j,i);
+                    cout << " ";
+                }
+            }
+            linha += 3;
+            lin ++;
+
+        }while(linha < 24);
+        coluna += 7;
+        colunas ++;
+        col++;
+    }while(coluna < 79 && colunas <= 7);
 }
 
 
@@ -217,16 +334,16 @@ int Jogador(int jogador){
             z$$$$$$$beeeeee
            d$$$$$$$$$$$$$*
           ^""""""""$$$$$"
-                  d$$$*
-                 d$$$"
-                d$$*
-               d$P"
-             .$$"
-            .$P"
-           .$"
-          .P"
-         ."
-        /"
+                      d$$$*
+                     d$$$"
+                    d$$*
+                   d$P"
+                 .$$"
+                .$P"
+               .$"
+              .P"
+             ."
+            /"
 
 ZAMBA
 */
