@@ -3,8 +3,8 @@
 #include <math.h>
 #include <iostream>
 #include <cmath>
-#include <conio.h>
 #include <windows.h>
+#include "gconio.h"
 using namespace std;
 
 #define MAX_COL 89
@@ -76,11 +76,6 @@ int main(void) {
         cout << "\n";
     }while(continuar == 's');
 
-
-
-/*
-
-*/
 
 
 
