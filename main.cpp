@@ -57,8 +57,6 @@ int main(void) {
                 }
             }
 
-
-
             CalcVitoria(vitoria, tabuleiro);
 
 
@@ -96,22 +94,20 @@ void IniciarFunc(int tabuleiro[LIN][COL]){
 
 void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]){
 
-    int jog = 1;
-
-    for (int i = LIN; i >= 0; i--) {
-        for (int j = COL; j >= 0; j--) {
+    for (int i = LIN - 1; i >= 0; i--) {
+        for (int j = COL - 1; j >= 0; j--) {
             int jog = 1;
             do{
 
 //===============================horizontal==================================
 
-                if(j - 3 > 0){
+                if(j - 3 >= 0){
                     if(tabuleiro[i][j] == jog && tabuleiro[i][j-1] == jog && tabuleiro[i][j-2] == jog && tabuleiro[i][j-3] == jog){
                         vitoria = jog;
                     }
                 }
 
-                if(j + 3 < 7){
+                if(j + 3 < COL){
                     if(tabuleiro[i][j] == jog && tabuleiro[i][j+1] == jog && tabuleiro[i][j+2] == jog && tabuleiro[i][j+3] == jog){
                         vitoria = jog;
                     }
@@ -119,7 +115,7 @@ void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]){
 
 //==============================vertical=======================================
 
-                if(i - 3 > 0){
+                if(i - 3 >= 0){
                     if(tabuleiro[i][j] == jog && tabuleiro[i-1][j] == jog && tabuleiro[i-2][j] == jog && tabuleiro[i-3][j] == jog){
                         vitoria = jog;
                     }
@@ -133,13 +129,13 @@ void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]){
 
 //=============================diagonal=========================================
 
-                if(j + 3 < 7 && i - 3 > 0){
+                if(j + 3 < COL && i - 3 >= 0){
                     if(tabuleiro[i][j] == jog && tabuleiro[i-1][j+1] == jog && tabuleiro[i-2][j+2] == jog && tabuleiro[i-3][j+3] == jog){
                         vitoria = jog;
                     }
                 }
 
-                if(j + 3 < 7 && i + 3 < LIN){
+                if(j + 3 < COL && i + 3 < LIN){
                     if(tabuleiro[i][j] == jog && tabuleiro[i+1][j+1] == jog && tabuleiro[i+2][j+2] == jog && tabuleiro[i+3][j+3] == jog){
                         vitoria = jog;
                     }
