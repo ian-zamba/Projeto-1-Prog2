@@ -15,13 +15,15 @@ using namespace std;
 void IniciarFunc(int tabuleiro[LIN][COL]);
 void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]);
 void Checar(char& continuar);
-void Checar(int& escolha, int contar[]);
+void Checar(int& escolha, int contar[], int jogador);
 int Jogador(int jogador);
 void TelaInicial ();
 void ImprimirTabuleiro(int tabuleiro[LIN][COL]);
+int MexerQuadrado(int jogador);
 
 
-int main(void) {
+
+int main(void) {//=============================Main=========================================
 
     system("mode con:cols=89 lines=25");//deixar o cmd do tamanho da tela do jogo
 
@@ -33,8 +35,6 @@ int main(void) {
 
     do{
 
-
-
         int contar[] = {0, 0, 0, 0, 0, 0, 0};
         int vitoria = 0;
         IniciarFunc(tabuleiro);
@@ -43,12 +43,8 @@ int main(void) {
         do{
 
             jogador = Jogador(jogador);
-            gotoxy(1,1);
-            cout << "Jogador: " << jogador << "\n";
-            textbackground(WHITE);
-            cout << "Qual coluna deseja jogar?\n   ";
-            gotoxy(1,3);
-            Checar(escolha, contar);
+
+            Checar(escolha, contar, jogador);
 
             for (int i = LIN - 1; i >= 0; i--) {
                 if(tabuleiro[i][escolha - 1] == 0){
@@ -65,24 +61,16 @@ int main(void) {
 
         }while(vitoria == 0);
 
-
-        cout << "vitoriaaaaaaa " << vitoria << "\n";
-        cout << "Deseja continuar? s/n\n";
-
         Checar(continuar);
 
-        cout << "\n";
     }while(continuar == 's');
-
-
-
-
 
     return 0;
 }
 
 
-void IniciarFunc(int tabuleiro[LIN][COL]){
+void IniciarFunc(int tabuleiro[LIN][COL]){//====================Iniciar a matriz com 0=========================================
+
 
     for (int i = 0; i < LIN; i++) {
         for (int j = 0; j < COL; j++) {
@@ -92,7 +80,8 @@ void IniciarFunc(int tabuleiro[LIN][COL]){
 
 }
 
-void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]){
+void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]){//=============checar se tem algum vencedor=========================================
+
 
     for (int i = LIN - 1; i >= 0; i--) {
         for (int j = COL - 1; j >= 0; j--) {
@@ -146,24 +135,54 @@ void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]){
         }
     }
 
+    if(vitoria != 0){
+        gotoxy(1,1);
+        cout << "          ";
+        if(vitoria == 1){
+            textbackground(BLUE);
+        }else if(vitoria == 2){
+            textbackground(GREEN);
+        }
+        gotoxy(35, 3);
+        cout << "Jogador numero " << vitoria << " WINS";
+
+    }
+
 }
 
-void Checar(char& continuar){
+void Checar(char& continuar){//=====================ver se continua=========================================
+
+    gotoxy(34,24);
+    cout << "Deseja continuar? s/n";
     do {
-        continuar = getch();
-        tolower(continuar);
+        continuar = tolower(getch());
+        gotoxy(35, 3);
+        cout << "                            ";
     }while(continuar != 's' && continuar != 'n');
+    gotoxy(1,25);
 }
 
-void Checar(int& escolha, int contar[]){
+void Checar(int& escolha, int contar[], int jogador){//============ver se a coluna é valida ou esta disponivel=========================================
 
     int aux;
 
     do{
 
-        cin >> escolha;
-        if(escolha > COL || escolha < 1 || contar[escolha-1] == 6){
-            cout << "Coluna invalida, tente novamente: ";
+        if(jogador == 1){
+            textbackground(BLUE);
+        }else if(jogador == 2){
+            textbackground(GREEN);
+        }
+        gotoxy(1,1);
+
+        cout << "Jogador: " << jogador << "\n";
+
+        escolha = MexerQuadrado(jogador);
+
+        if(contar[escolha-1] == 6){
+            gotoxy(1, 2);
+            textbackground(WHITE);
+            cout << "Coluna invalida";
             aux = 0;
         }else{
             contar[escolha-1]++;
@@ -174,7 +193,7 @@ void Checar(int& escolha, int contar[]){
 
 }
 
-int Jogador(int jogador){
+int Jogador(int jogador){//================trocar de jogador por rodada=========================================
 
     if(jogador == 1){
         jogador++;
@@ -187,7 +206,7 @@ int Jogador(int jogador){
     return jogador;
 }
 
-void TelaInicial(){
+void TelaInicial(){//========================fazer a tela inicial do programa=========================================
 
     textbackground(WHITE);
     textcolor(BLACK);
@@ -251,7 +270,8 @@ void TelaInicial(){
 
 }
 
-void ImprimirTabuleiro(int tabuleiro[LIN][COL]){
+void ImprimirTabuleiro(int tabuleiro[LIN][COL]){//=================imprimir o tabuleiro na tela=========================================
+
 
     int linha = 6, coluna = 22, colunas = 1;
     int lin = 0, col = 0;
@@ -297,6 +317,95 @@ void ImprimirTabuleiro(int tabuleiro[LIN][COL]){
         colunas ++;
         col++;
     }while(coluna < 79 && colunas <= 7);
+}
+
+int MexerQuadrado(int jogador){//==================mexer o quadrado superior=====================
+
+    int coluna = 1;
+    int l = 2 , c = 22;
+    int tecla;
+
+
+    gotoxy(c , l);
+    cout << "    ";
+    l++;
+    gotoxy(c , l);
+    cout << "    ";
+
+    do{
+
+            l = 2;
+
+            tecla =getch();
+
+            if(jogador == 1){
+                textbackground(BLUE);
+            }else if(jogador == 2){
+                textbackground(GREEN);
+            }
+
+            if(coluna < COL){
+                if(tecla == 100 || tecla == 77){//=======ir para a direita========
+                    c += 7;
+                    coluna++;
+
+                    gotoxy(c , l);
+                    cout << "    ";
+                    l++;
+                    gotoxy(c , l);
+                    cout << "    ";
+
+                    c -= 7;
+                    l = 2;
+
+                    textbackground(WHITE);
+                    gotoxy(c , l);
+                    cout << "    ";
+                    l++;
+                    gotoxy(c , l);
+                    cout << "    ";
+
+                    c += 7;
+                    gotoxy(c , l);
+                }
+            }
+
+            if(coluna > 1){
+                if(tecla == 97 || tecla == 75){//=======ir para a esquerda========
+                    c -= 7;
+                    coluna--;
+
+                    gotoxy(c , l);
+                    cout << "    ";
+                    l++;
+                    gotoxy(c , l);
+                    cout << "    ";
+
+                    c += 7;
+                    l = 2;
+
+                    textbackground(WHITE);
+                    gotoxy(c , l);
+                    cout << "    ";
+                    l++;
+                    gotoxy(c , l);
+                    cout << "    ";
+
+                    c -= 7;
+                    gotoxy(c , l);
+                }
+            }
+
+   }while(tecla != 32 && tecla != 13 && tecla != 80 && tecla != 115);
+
+    textbackground(WHITE);
+    gotoxy(c , l);
+    cout << "    ";
+    l++;
+    gotoxy(c , l);
+    cout << "    ";
+
+    return coluna;
 }
 
 
