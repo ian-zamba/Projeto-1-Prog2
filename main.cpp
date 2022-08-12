@@ -145,7 +145,9 @@ void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]){//=============checar se
         }
         gotoxy(35, 3);
         cout << "Jogador numero " << vitoria << " WINS";
-
+        textbackground(WHITE);
+        gotoxy(54,1);
+        cout << "                                         ";
     }
 
 }
@@ -153,12 +155,16 @@ void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]){//=============checar se
 void Checar(char& continuar){//=====================ver se continua=========================================
 
     gotoxy(34,24);
+    textbackground(WHITE);
     cout << "Deseja continuar? s/n";
     do {
         continuar = tolower(getch());
-        gotoxy(35, 3);
-        cout << "                            ";
     }while(continuar != 's' && continuar != 'n');
+
+    gotoxy(35, 3);
+    cout << "                            ";
+    gotoxy(34,24);
+    cout << "                            ";
     gotoxy(1,25);
 }
 
@@ -167,6 +173,10 @@ void Checar(int& escolha, int contar[], int jogador){//============ver se a colu
     int aux;
 
     do{
+
+        textbackground(WHITE);
+        gotoxy(55, 1);
+        cout << "Usar A, D ou SETAS para movimentar";
 
         if(jogador == 1){
             textbackground(BLUE);
@@ -325,7 +335,6 @@ int MexerQuadrado(int jogador){//==================mexer o quadrado superior====
     int l = 2 , c = 22;
     int tecla;
 
-
     gotoxy(c , l);
     cout << "    ";
     l++;
@@ -404,6 +413,9 @@ int MexerQuadrado(int jogador){//==================mexer o quadrado superior====
     l++;
     gotoxy(c , l);
     cout << "    ";
+
+    gotoxy(1, 2);
+    cout << "               ";
 
     return coluna;
 }
