@@ -1,2 +1,2 @@
-# Projeto de Prog 2
+# Projeto de Prog II
 Projeto relacionado ao jogo Lig 4
