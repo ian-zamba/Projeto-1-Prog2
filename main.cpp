@@ -19,44 +19,25 @@ int main(void) {//=============================Main=============================
 
     system("mode con:cols=89 lines=25");//deixar o cmd do tamanho da tela do jogo
 
-    int tabuleiro [LIN][COL];
-    int escolha, jogador = 2;
-    char continuar;
-
     TelaInicial();
+    char op;
+    char* arquivo = "historico.dat";
 
     do{
+        Menu(op);
 
-        int contar[] = {0, 0, 0, 0, 0, 0, 0};
-        int vitoria = 0;
-        IniciarFunc(tabuleiro);
-        ImprimirTabuleiro(tabuleiro);
-        int cont = 0;
+        if(op == '0'){
+            return 0;
+        }
 
-        do{
+        if(op == '1'){
+           jogo(arquivo);
+        }
+        else if(op == '2'){
+            DadoArq(arquivo);
+        }
 
-            cont++;
-
-            jogador = Jogador(jogador);
-
-            Checar(escolha, contar, jogador);
-
-            MontarTabuleiro(tabuleiro, jogador, escolha);
-
-            CalcVitoria(vitoria, tabuleiro);
-
-            ImprimirTabuleiro(tabuleiro);
-
-            if(cont == 42 && vitoria == 0){
-                CalcVitoria();
-                break;
-            }
-
-        }while(vitoria == 0);
-
-        Checar(continuar);
-
-    }while(continuar == 's');
+    }while(op != '0');
 
     return 0;
 }

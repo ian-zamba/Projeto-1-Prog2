@@ -4,6 +4,9 @@
 #include <iostream>
 #include <cmath>
 #include <windows.h>
+#include <iomanip>
+#include <ctype.h>
+#include <fstream> //arquivo
 using namespace std;
 
 #define MAX_COL 89
@@ -11,19 +14,35 @@ using namespace std;
 #define LIN 6
 #define COL 7
 
+struct player{
+   char nome1[30];
+   int pontos1 = 0;
+   char nome2[30];
+   int pontos2 = 0;
+
+};
+
 void IniciarFunc(int tabuleiro[LIN][COL]);
-void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]);
+void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL], player& j1, player& j2);
 void Checar(char& continuar);
 void Checar(int& escolha, int contar[], int jogador);
-int Jogador(int jogador);
+int Checar();
+int Jogador(int jogador, player j1, player j2);
 void TelaInicial ();
 void ImprimirTabuleiro(int tabuleiro[LIN][COL]);
 int MexerQuadrado(int jogador);
 void MontarTabuleiro(int tabuleiro[LIN][COL], int jogador);
 void CalcVitoria();
+void Menu();
+void LigGrande();
+void jogo(char* arquivo);
+void NomeJogador(player& j1, player& j2);
+void Arquivo(char* arquivo, player j1, player j2);
+void DadoArq(char* arquivo);
 
 
-void IniciarFunc(int tabuleiro[LIN][COL]){//====================Iniciar a matriz com 0=========================================
+//====================Iniciar a matriz com 0=========================================
+void IniciarFunc(int tabuleiro[LIN][COL]){
 
 
     for (int i = 0; i < LIN; i++) {
@@ -33,9 +52,8 @@ void IniciarFunc(int tabuleiro[LIN][COL]){//====================Iniciar a matriz
     }
 
 }
-
-void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]){//=============checar se tem algum vencedor=========================================
-
+//=============checar se tem algum vencedor=========================================
+void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL], player& pl){
 
     for (int i = LIN - 1; i >= 0; i--) {
         for (int j = COL - 1; j >= 0; j--) {
@@ -91,22 +109,27 @@ void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL]){//=============checar se
 
     if(vitoria != 0){
         gotoxy(1,1);
-        cout << "          ";
+        cout << "                               ";
+
+        gotoxy(35, 3);
         if(vitoria == 1){
             textbackground(BLUE);
+            pl.pontos1++;
+            cout << "Jogador: " << pl.nome1 << " WINS";
         }else if(vitoria == 2){
             textbackground(GREEN);
+            pl.pontos2++;
+            cout << "Jogador: " << pl.nome2 << " WINS";
         }
-        gotoxy(35, 3);
-        cout << "Jogador numero " << vitoria << " WINS";
+
         textbackground(WHITE);
         gotoxy(54,1);
         cout << "                                         ";
     }
 
 }
-
-void Checar(char& continuar){//=====================ver se continua=========================================
+//=====================ver se continua=========================================
+void Checar(char& continuar){
 
     gotoxy(34,24);
     textbackground(WHITE);
@@ -122,27 +145,12 @@ void Checar(char& continuar){//=====================ver se continua=============
     cout << "                            ";
     gotoxy(1,25);
 }
-
-void Checar(int& escolha, int contar[], int jogador){//============ver se a coluna é valida ou esta disponivel=========================================
+//============ver se a coluna e valida ou esta disponivel=========================================
+void Checar(int& escolha, int contar[], int jogador){
 
     int aux;
 
     do{
-
-        textbackground(WHITE);
-        textcolor(BLACK);
-        gotoxy(55, 1);
-        cout << "Usar A, D ou SETAS para movimentar";
-
-        if(jogador == 1){
-            textbackground(BLUE);
-            textcolor(WHITE);
-        }else if(jogador == 2){
-            textbackground(GREEN);
-        }
-        gotoxy(1,1);
-
-        cout << "Jogador: " << jogador << "\n";
 
         escolha = MexerQuadrado(jogador);
 
@@ -151,6 +159,13 @@ void Checar(int& escolha, int contar[], int jogador){//============ver se a colu
             textbackground(WHITE);
             textcolor(BLACK);
             cout << "Coluna invalida";
+
+            if(jogador == 1){
+                textbackground(BLUE);
+            }else if(jogador == 2){
+                textbackground(GREEN);
+            }
+
             aux = 0;
         }else{
             contar[escolha-1]++;
@@ -160,47 +175,47 @@ void Checar(int& escolha, int contar[], int jogador){//============ver se a colu
     }while(escolha > COL || escolha < 1 || aux == 0);
 
 }
+//=========================chechar se a opcar escolhida e valida================
+int Checar(){
 
-int Jogador(int jogador){//================trocar de jogador por rodada=========================================
+    char op;
+
+    do{
+        op = getch();
+    }while(op != '1' && op != '2' && op != '0');
+
+    return op;
+
+}
+//================trocar de jogador por rodada=========================================
+int Jogador(int jogador, player pl){
+
+    gotoxy(1,1);
 
     if(jogador == 1){
         jogador++;
         textbackground(GREEN);
         textcolor(BLACK);
+        cout << "Jogador: " << pl.nome2;
+        textbackground(WHITE);
+        cout << "                                  ";
+        textbackground(GREEN);
     }else if (jogador == 2){
         jogador--;
         textbackground(BLUE);
         textcolor(WHITE);
+        cout << "Jogador: " << pl.nome1;
+        textbackground(WHITE);
+        cout << "                                  ";
+        textbackground(BLUE);
     }
 
     return jogador;
 }
+//========================fazer a tela inicial do programa=========================================
+void TelaInicial(){
 
-void TelaInicial(){//========================fazer a tela inicial do programa=========================================
-
-    textbackground(WHITE);
-    textcolor(BLACK);
-    gotoxy(1,1);
-
-    for (int i = 1; i <= MAX_LIN; i++){
-        for (int c = 1; c <= MAX_COL; c++){
-            printf(" ");
-        }
-        printf("\n");
-    }
-
-    gotoxy(30, 4);
-    cout << "  _      _____ _____   _  _    ";
-    gotoxy(30, 5);
-    cout << " | |    |_   _/ ____| | || |   ";
-    gotoxy(30, 6);
-    cout << " | |      | || |  __  | || |_  ";
-    gotoxy(30, 7);
-    cout << " | |      | || | |_ | |__   _| ";
-    gotoxy(30, 8);
-    cout << " | |____ _| || |__| |    | |   ";
-    gotoxy(30, 9);
-    cout << " |______|_____\\_____|    |_|   ";
+    LigGrande();
 
     gotoxy(26,16);
     cout << "Pressione qualquer tecla para continuar";
@@ -239,9 +254,13 @@ void TelaInicial(){//========================fazer a tela inicial do programa===
     gotoxy(1,1);
 
 }
+//=================imprimir o tabuleiro na tela=========================================
+void ImprimirTabuleiro(int tabuleiro[LIN][COL]){
 
-void ImprimirTabuleiro(int tabuleiro[LIN][COL]){//=================imprimir o tabuleiro na tela=========================================
-
+    textbackground(WHITE);
+    textcolor(BLACK);
+    gotoxy(55, 1);
+    cout << "Usar A, D ou SETAS para movimentar";
 
     int linha = 6, coluna = 22, colunas = 1;
     int lin = 0, col = 0;
@@ -269,8 +288,6 @@ void ImprimirTabuleiro(int tabuleiro[LIN][COL]){//=================imprimir o ta
                 textbackground(GREEN);
             }
 
-
-
             gotoxy(coluna,linha);
 
             for (int i = linha; i < linha + 2; i++) {
@@ -288,8 +305,8 @@ void ImprimirTabuleiro(int tabuleiro[LIN][COL]){//=================imprimir o ta
         col++;
     }while(coluna < 79 && colunas <= 7);
 }
-
-int MexerQuadrado(int jogador){//==================mexer o quadrado superior=====================
+//==================mexer o quadrado superior=====================
+int MexerQuadrado(int jogador){
 
     int coluna = 1;
     int l = 2 , c = 22;
@@ -379,7 +396,7 @@ int MexerQuadrado(int jogador){//==================mexer o quadrado superior====
 
     return coluna;
 }
-
+//==================coloca o numero equivalente ao jogador na coluna escolhida=====================
 void MontarTabuleiro(int tabuleiro[LIN][COL], int jogador, int escolha){
 
     for (int i = LIN - 1; i >= 0; i--) {
@@ -390,7 +407,7 @@ void MontarTabuleiro(int tabuleiro[LIN][COL], int jogador, int escolha){
             }
 
 }
-
+//==================imprime na tela quando der empate=====================
 void CalcVitoria(){
 
     gotoxy(1,1);
@@ -405,3 +422,193 @@ void CalcVitoria(){
     cout << "                                         ";
 
 }
+//==================Menu=====================
+void Menu(char& op){
+
+    LigGrande();
+
+    gotoxy(45,16);
+    cout << "1-Jogar";
+    gotoxy(43,18);
+    cout << "2-Historico";
+    gotoxy(82, 24);
+    cout << "0-Sair";
+    op = Checar();
+    system("cls");
+
+}
+//==================imprimir Lig4 grande===================
+void LigGrande(){
+
+    textbackground(WHITE);
+    textcolor(BLACK);
+    gotoxy(1,1);
+
+    for (int i = 1; i <= MAX_LIN; i++){
+        for (int c = 1; c <= MAX_COL; c++){
+            printf(" ");
+        }
+        printf("\n");
+    }
+
+    gotoxy(30, 4);
+    cout << "  _      _____ _____   _  _    ";
+    gotoxy(30, 5);
+    cout << " | |    |_   _/ ____| | || |   ";
+    gotoxy(30, 6);
+    cout << " | |      | || |  __  | || |_  ";
+    gotoxy(30, 7);
+    cout << " | |      | || | |_ | |__   _| ";
+    gotoxy(30, 8);
+    cout << " | |____ _| || |__| |    | |   ";
+    gotoxy(30, 9);
+    cout << " |______|_____\\_____|    |_|   ";
+
+}
+//===========================coletar o nome dos jogadores=======================
+void NomeJogador(player& pl){
+
+    LigGrande();
+    gotoxy(26,16);
+    cout << "Nome do jogador 1:                                                                  ";
+    gotoxy(45,16);
+    fgets(pl.nome1, 30, stdin);
+    pl.nome1[strlen(pl.nome1) - 1] = '\0';
+    gotoxy(26,16);
+    cout << "Nome do jogador 2:                                                                  ";
+    gotoxy(45,16);
+    fgets(pl.nome2, 30, stdin);
+    pl.nome2[strlen(pl.nome2) - 1] = '\0';
+    system("cls");
+
+}
+//==================arquivo texto=====================
+void Arquivo(char* arquivo, player pl){
+
+    int aux = 0;
+    ifstream teste(arquivo);
+        if(teste){
+            aux = 1;
+        }
+    teste.close();
+
+    fstream his(arquivo, ios :: app);
+
+    his.write((const char*) (&pl) ,sizeof (player));
+
+    his.close();
+
+}
+//=================imprimir da dos do arquivo=================
+void DadoArq(char* arquivo){
+
+    player pl;
+    string s;
+    system("cls");
+    int i = 3, cont = -1;
+
+    fstream tam(arquivo, ios :: in);
+
+        gotoxy(2, 1);
+        cout << setiosflags(ios :: left)
+            <<  setw(30) << "Jogador 1"
+            <<  setw(6) << "Pontos"
+            << "   X    "
+            <<  setw(30) << "Jogador 2"
+            <<  setw(6) << "Pontos" << endl;
+
+        if(!tam){
+            gotoxy(31,13);
+            cout << "Nenhum historico disponivel";
+        }
+        else{
+            tam.read((char*)(&pl), sizeof(player));
+
+            while (!tam.eof()){
+                cont++;
+                tam.read((char*)(&pl), sizeof(player));
+            }
+
+            if(cont > 10){
+                cont = 10;
+            }
+        }
+    tam.close();
+
+    fstream his(arquivo, ios :: in);
+        while(cont>=0){
+
+            his.seekp(cont * sizeof(player), ios_base::beg);
+            his.read((char*)(&pl), sizeof(player));
+
+            gotoxy(2, i);
+            cout << setiosflags(ios :: left)
+                    <<  setw(30) << pl.nome1
+                    << resetiosflags(ios :: left)
+                    <<  setw(6) << pl.pontos1
+                    << setiosflags(ios :: left)
+                    << "   X    "
+                    <<  setw(30) << pl.nome2
+                    << resetiosflags(ios :: left)
+                    <<  setw(6) << pl.pontos2 << "\n";
+                    i += 2;
+
+            cont--;
+        }
+
+    his.close();
+
+    gotoxy(63, 25);
+    cout << "Qualquer tecla para voltar";
+    getch();
+
+}
+
+
+//==================jogo==================
+void jogo(char* arquivo){
+
+    player pl;
+    int tabuleiro [LIN][COL];
+    int escolha, jogador = 2;
+    char continuar;
+    NomeJogador(pl);
+
+     do{
+
+                int contar[] = {0, 0, 0, 0, 0, 0, 0};
+                int vitoria = 0;
+                IniciarFunc(tabuleiro);
+                ImprimirTabuleiro(tabuleiro);
+                int cont = 0;
+
+                do{
+
+                    cont++;
+
+                    jogador = Jogador(jogador, pl);
+
+                    Checar(escolha, contar, jogador);
+
+                    MontarTabuleiro(tabuleiro, jogador, escolha);
+
+                    CalcVitoria(vitoria, tabuleiro, pl);
+
+                    ImprimirTabuleiro(tabuleiro);
+
+                    if(cont == 42 && vitoria == 0){
+                        CalcVitoria();
+                        break;
+                    }
+
+                }while(vitoria == 0);
+
+                Checar(continuar);
+
+            }while(continuar == 's');
+
+            Arquivo(arquivo, pl);
+
+
+}
+
