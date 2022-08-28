@@ -19,65 +19,21 @@ int main(void) {//=============================Main=============================
 
     system("mode con:cols=89 lines=25");//deixar o cmd do tamanho da tela do jogo
 
-    TelaInicial();
+    TelaInicial();//imprimir a tela inicial e carregar o jogo
     char op;
     char* arquivo = "historico.dat";
 
     do{
-        Menu(op);
+        Menu(op);//escolhar quais das 3 opcoes o jogador deseja jogar
 
-        if(op == '0'){
-            return 0;
-        }
-
-        if(op == '1'){
+        if(op == '1'){//opcao jogar
            jogo(arquivo);
         }
-        else if(op == '2'){
+        else if(op == '2'){//opcao ver historico
             DadoArq(arquivo);
         }
 
-    }while(op != '0');
+    }while(op != '0');//opcao sair
 
-    return 0;
+    return 0;//finalizar o programa
 }
-
-
-/*
-                 .eeeeeeeee
-                .$$$$$$$$P"
-               .$$$$$$$$P
-              z$$$$$$$$P
-             z$$$$$$$$"
-            z$$$$$$$$"
-           d$$$$$$$$"
-          d$$$$$$$$"
-        .d$$$$$$$P
-       .$$$$$$$$P
-      .$$$$$$$$$.........
-     .$$$$$$$$$$$$$$$$$$"
-    z$$$$$$$$$$$$$$$$$P"
-   -**********$$$$$$$P
-                     d$$$$$$"
-                   .d$$$$$$"
-                  .$$$$$$P"
-                 z$$$$$$P
-                d$$$$$$"
-              .d$$$$$$"
-             .$$$$$$$"
-            z$$$$$$$beeeeee
-           d$$$$$$$$$$$$$*
-          ^""""""""$$$$$"
-                      d$$$*
-                     d$$$"
-                    d$$*
-                   d$P"
-                 .$$"
-                .$P"
-               .$"
-              .P"
-             ."
-            /"
-
-ZAMBA
-*/

@@ -1,4 +1,4 @@
-#include <stdio.h>
+ #include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include <iostream>
@@ -23,7 +23,8 @@ struct player{
 };
 
 void IniciarFunc(int tabuleiro[LIN][COL]);
-void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL], player& j1, player& j2);
+void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL], player& pl);
+void CalcVitoria();
 void Checar(char& continuar);
 void Checar(int& escolha, int contar[], int jogador);
 int Checar();
@@ -32,7 +33,6 @@ void TelaInicial ();
 void ImprimirTabuleiro(int tabuleiro[LIN][COL]);
 int MexerQuadrado(int jogador);
 void MontarTabuleiro(int tabuleiro[LIN][COL], int jogador);
-void CalcVitoria();
 void Menu();
 void LigGrande();
 void jogo(char* arquivo);
@@ -43,7 +43,7 @@ void DadoArq(char* arquivo);
 
 //====================Iniciar a matriz com 0=========================================
 void IniciarFunc(int tabuleiro[LIN][COL]){
-
+    /*percorre toda a matriz tabuleiro e atribui o valor 0 para todos os espacos*/
 
     for (int i = 0; i < LIN; i++) {
         for (int j = 0; j < COL; j++) {
@@ -56,19 +56,19 @@ void IniciarFunc(int tabuleiro[LIN][COL]){
 void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL], player& pl){
 
     for (int i = LIN - 1; i >= 0; i--) {
-        for (int j = COL - 1; j >= 0; j--) {
+        for (int j = COL - 1; j >= 0; j--) {//percorre todo a matriz
             int jog = 1;
             do{
 
 //===============================horizontal==================================
 
-                if(j - 3 >= 0){
+                if(j - 3 >= 0){//checa os valores da esquerda da posicao
                     if(tabuleiro[i][j] == jog && tabuleiro[i][j-1] == jog && tabuleiro[i][j-2] == jog && tabuleiro[i][j-3] == jog){
                         vitoria = jog;
                     }
                 }
 
-                if(j + 3 < COL){
+                if(j + 3 < COL){//checa os valores da direita da posicao
                     if(tabuleiro[i][j] == jog && tabuleiro[i][j+1] == jog && tabuleiro[i][j+2] == jog && tabuleiro[i][j+3] == jog){
                         vitoria = jog;
                     }
@@ -76,13 +76,13 @@ void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL], player& pl){
 
 //==============================vertical=======================================
 
-                if(i - 3 >= 0){
+                if(i - 3 >= 0){//checa os valores de cima da posicao
                     if(tabuleiro[i][j] == jog && tabuleiro[i-1][j] == jog && tabuleiro[i-2][j] == jog && tabuleiro[i-3][j] == jog){
                         vitoria = jog;
                     }
                 }
 
-                if(i + 3 < LIN){
+                if(i + 3 < LIN){//checa os valores de baixo da posicao
                     if(tabuleiro[i][j] == jog && tabuleiro[i+1][j] == jog && tabuleiro[i+2][j] == jog && tabuleiro[i+3][j] == jog){
                         vitoria = jog;
                     }
@@ -90,19 +90,19 @@ void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL], player& pl){
 
 //=============================diagonal=========================================
 
-                if(j + 3 < COL && i - 3 >= 0){
+                if(j + 3 < COL && i - 3 >= 0){//checa os valores da diagonal da posicao
                     if(tabuleiro[i][j] == jog && tabuleiro[i-1][j+1] == jog && tabuleiro[i-2][j+2] == jog && tabuleiro[i-3][j+3] == jog){
                         vitoria = jog;
                     }
                 }
 
-                if(j + 3 < COL && i + 3 < LIN){
+                if(j + 3 < COL && i + 3 < LIN){//checa os valores da diagonal da posicao
                     if(tabuleiro[i][j] == jog && tabuleiro[i+1][j+1] == jog && tabuleiro[i+2][j+2] == jog && tabuleiro[i+3][j+3] == jog){
                         vitoria = jog;
                     }
                 }
 
-                jog++;
+                jog++;//passa apara o priximo jogador para checar se ele ganhou
             }while(jog <= 2);
         }
     }
@@ -112,11 +112,11 @@ void CalcVitoria(int& vitoria, int tabuleiro[LIN][COL], player& pl){
         cout << "                               ";
 
         gotoxy(35, 3);
-        if(vitoria == 1){
+        if(vitoria == 1){//imprime na tela o nome do jogador 1
             textbackground(BLUE);
             pl.pontos1++;
             cout << "Jogador: " << pl.nome1 << " WINS";
-        }else if(vitoria == 2){
+        }else if(vitoria == 2){//imprime na tela o nome do jogador 1
             textbackground(GREEN);
             pl.pontos2++;
             cout << "Jogador: " << pl.nome2 << " WINS";
@@ -135,7 +135,7 @@ void Checar(char& continuar){
     textbackground(WHITE);
     textcolor(BLACK);
     cout << "Deseja continuar? s/n";
-    do {
+    do {//pede para o jogador informar se deseja continuar o jogo (s) ou se deseja parar (n)
         continuar = tolower(getch());
     }while(continuar != 's' && continuar != 'n');
 
@@ -152,9 +152,9 @@ void Checar(int& escolha, int contar[], int jogador){
 
     do{
 
-        escolha = MexerQuadrado(jogador);
+        escolha = MexerQuadrado(jogador);//recebe a posicao escolhida pelo jogador
 
-        if(contar[escolha-1] == 6){
+        if(contar[escolha-1] == 6){//checar se a linha escolhida pelo jogador esta cheia
             gotoxy(1, 2);
             textbackground(WHITE);
             textcolor(BLACK);
@@ -167,7 +167,7 @@ void Checar(int& escolha, int contar[], int jogador){
             }
 
             aux = 0;
-        }else{
+        }else{//se nao estiver cheia ele aumenta um numero em um vetor correspondente a cada linha (ele fica cheio quando o valor chega a 6)
             contar[escolha-1]++;
             aux = 1;
         }
@@ -180,7 +180,7 @@ int Checar(){
 
     char op;
 
-    do{
+    do{//pede a opcao escolhida no menu (1 - jogo, 2 - historico, 3 - sair)
         op = getch();
     }while(op != '1' && op != '2' && op != '0');
 
@@ -192,7 +192,7 @@ int Jogador(int jogador, player pl){
 
     gotoxy(1,1);
 
-    if(jogador == 1){
+    if(jogador == 1){//troca do jogador 1 para o jogador 2 e imprime o nome dele na respectiva cor
         jogador++;
         textbackground(GREEN);
         textcolor(BLACK);
@@ -200,7 +200,7 @@ int Jogador(int jogador, player pl){
         textbackground(WHITE);
         cout << "                                  ";
         textbackground(GREEN);
-    }else if (jogador == 2){
+    }else if (jogador == 2){//troca do jogador 2 para o jogador 1 e imprime o nome dele na respectiva cor
         jogador--;
         textbackground(BLUE);
         textcolor(WHITE);
@@ -212,7 +212,7 @@ int Jogador(int jogador, player pl){
 
     return jogador;
 }
-//========================fazer a tela inicial do programa=========================================
+//========================tela inicial do programa=========================================
 void TelaInicial(){
 
     LigGrande();
@@ -236,17 +236,17 @@ void TelaInicial(){
     textbackground(RED);
     gotoxy(24, 16);
 
-    for (int c = 16; c <= 25; c++){
+    for (int c = 16; c <= 25; c++){//fazer a parte grafica do carregamento
         printf(" ");
-        //Sleep(200);
+        Sleep(150);
     }
     for (int c = 26; c <= 66; c++){
         printf(" ");
-        //Sleep(70);
+        Sleep(70);
     }
     for (int c = 67; c <= 71; c++){
         printf(" ");
-       //Sleep(300);
+       Sleep(250);
     }
 
     textbackground(WHITE);
@@ -268,7 +268,7 @@ void ImprimirTabuleiro(int tabuleiro[LIN][COL]){
     textbackground(RED);
     gotoxy(20,5);
 
-    for (int l = 5; l <= MAX_LIN - 1; l++){
+    for (int l = 5; l <= MAX_LIN - 1; l++){//imprime um quadrado vermelho
         for (int c = 6; c <= MAX_COL-34; c++){
             printf(" ");
         }
@@ -280,23 +280,23 @@ void ImprimirTabuleiro(int tabuleiro[LIN][COL]){
         lin = 0;
         do{
 
-            if(tabuleiro[lin][col] == 0){
+            if(tabuleiro[lin][col] == 0){//ninguem nessa coluna/linha o fundo fica branco
                 textbackground(WHITE);
-            }else if(tabuleiro[lin][col] == 1){
+            }else if(tabuleiro[lin][col] == 1){//jogador 1 nessa coluna/linha o fundo fica azul
                 textbackground(BLUE);
-            }else if(tabuleiro[lin][col] == 2){
+            }else if(tabuleiro[lin][col] == 2){//jogador 2 nessa coluna/linha o fundo fica verde
                 textbackground(GREEN);
             }
 
             gotoxy(coluna,linha);
 
-            for (int i = linha; i < linha + 2; i++) {
+            for (int i = linha; i < linha + 2; i++) {//imprime um quadrado menor com a respectiva cor
                 for (int j = coluna; j < coluna + 4; j++) {
                     gotoxy(j,i);
                     cout << " ";
                 }
             }
-            linha += 3;
+            linha += 3;//vai para a posicao do procimo quadrado
             lin ++;
 
         }while(linha < 24);
@@ -399,12 +399,12 @@ int MexerQuadrado(int jogador){
 //==================coloca o numero equivalente ao jogador na coluna escolhida=====================
 void MontarTabuleiro(int tabuleiro[LIN][COL], int jogador, int escolha){
 
-    for (int i = LIN - 1; i >= 0; i--) {
-                if(tabuleiro[i][escolha - 1] == 0){
-                    tabuleiro[i][escolha - 1] = jogador;
-                    break;
-                }
-            }
+    for (int i = LIN - 1; i >= 0; i--) {//percorre o tabuleiro de cima para baixo, indo na coluna escolhida e colocando o valor no espaco mais em baixo disponivel
+        if(tabuleiro[i][escolha - 1] == 0){
+            tabuleiro[i][escolha - 1] = jogador;
+            break;
+        }
+    }
 
 }
 //==================imprime na tela quando der empate=====================
@@ -427,9 +427,9 @@ void Menu(char& op){
 
     LigGrande();
 
-    gotoxy(45,16);
+    gotoxy(42,16);
     cout << "1-Jogar";
-    gotoxy(43,18);
+    gotoxy(40,18);
     cout << "2-Historico";
     gotoxy(82, 24);
     cout << "0-Sair";
@@ -472,50 +472,42 @@ void NomeJogador(player& pl){
     gotoxy(26,16);
     cout << "Nome do jogador 1:                                                                  ";
     gotoxy(45,16);
-    fgets(pl.nome1, 30, stdin);
+    fgets(pl.nome1, 30, stdin);//recebe o nome do jogador 1
     pl.nome1[strlen(pl.nome1) - 1] = '\0';
     gotoxy(26,16);
     cout << "Nome do jogador 2:                                                                  ";
     gotoxy(45,16);
-    fgets(pl.nome2, 30, stdin);
+    fgets(pl.nome2, 30, stdin);//recebe o nome do jogador 2
     pl.nome2[strlen(pl.nome2) - 1] = '\0';
     system("cls");
 
 }
-//==================arquivo texto=====================
+//==================escrever os dados no arquivo=====================
 void Arquivo(char* arquivo, player pl){
-
-    int aux = 0;
-    ifstream teste(arquivo);
-        if(teste){
-            aux = 1;
-        }
-    teste.close();
 
     fstream his(arquivo, ios :: app);
 
-    his.write((const char*) (&pl) ,sizeof (player));
+        his.write((const char*) (&pl) ,sizeof (player));
 
     his.close();
 
 }
-//=================imprimir da dos do arquivo=================
+//=================ler os dados do arquivo=================
 void DadoArq(char* arquivo){
 
     player pl;
     string s;
     system("cls");
     int i = 3, cont = -1;
+    gotoxy(2, 1);
+    cout << setiosflags(ios :: left)
+        <<  setw(30) << "Jogador 1"
+        <<  setw(6) << "Pontos"
+        << "   X    "
+        <<  setw(30) << "Jogador 2"
+        <<  setw(6) << "Pontos" << endl;
 
     fstream tam(arquivo, ios :: in);
-
-        gotoxy(2, 1);
-        cout << setiosflags(ios :: left)
-            <<  setw(30) << "Jogador 1"
-            <<  setw(6) << "Pontos"
-            << "   X    "
-            <<  setw(30) << "Jogador 2"
-            <<  setw(6) << "Pontos" << endl;
 
         if(!tam){
             gotoxy(31,13);
@@ -524,7 +516,7 @@ void DadoArq(char* arquivo){
         else{
             tam.read((char*)(&pl), sizeof(player));
 
-            while (!tam.eof()){
+            while (!tam.eof()){//percorre o arquivo contando quantas linhas existem nele
                 cont++;
                 tam.read((char*)(&pl), sizeof(player));
             }
@@ -536,9 +528,9 @@ void DadoArq(char* arquivo){
     tam.close();
 
     fstream his(arquivo, ios :: in);
-        while(cont>=0){
+        while(cont>=0){//percorre o arquivo de baixo para cima, imprimindo na tela os dados dos jogadores (do mais recente para o mais antigo)
 
-            his.seekp(cont * sizeof(player), ios_base::beg);
+            his.seekp(cont * sizeof(player));
             his.read((char*)(&pl), sizeof(player));
 
             gotoxy(2, i);
@@ -596,7 +588,7 @@ void jogo(char* arquivo){
 
                     ImprimirTabuleiro(tabuleiro);
 
-                    if(cont == 42 && vitoria == 0){
+                    if(cont == 42 && vitoria == 0){//checa se o tabuleiro esta cheio e nao tem nenhum vencedor (empate)
                         CalcVitoria();
                         break;
                     }
@@ -608,7 +600,5 @@ void jogo(char* arquivo){
             }while(continuar == 's');
 
             Arquivo(arquivo, pl);
-
-
 }
 
